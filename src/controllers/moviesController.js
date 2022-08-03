@@ -12,11 +12,18 @@ let moviesController = {
             .then(function (pelicula) {
                 res.render("moviesDetail", { movie: pelicula })
             })
+    },
+    new: function (req, res) {
+        db.Peliculas.findAll({order : [['release_date', 'DESC']], limit: 5})
+        .then(function (peliculas) {
+            res.render("moviesList", { movies: peliculas })
+        })
+    },
+    recomended : (req, res) => {db.Peliculas.findAll({where:{rating: {[db.Sequelize.Op.gte] : 8}}, order: [['rating', 'DESC']]})
+            .then(movies => {
+                res.render('recommendedMovies', {movies});
+            });
     }
-    // recomended: function (req, res) {
-    // },
-    // new: function (req, res) {
-    // }
 }
 
 module.exports = moviesController;
